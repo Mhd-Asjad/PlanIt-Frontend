@@ -1,8 +1,6 @@
 {
-  "projects": {
-    "rootDirectory": "planit-frontend"
-  },
   "rewrites": [
     { "source": "/(.*)", "destination": "/" }
   ]
 }
+
