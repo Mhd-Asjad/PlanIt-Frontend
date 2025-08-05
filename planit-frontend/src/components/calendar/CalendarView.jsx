@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
-import { useApi } from '../../axios/useApi'
+import { useApi } from '../../axios/useApi.js'
 import interactionPlugin from "@fullcalendar/interaction";
 import {toast } from 'sonner';
 import { ShieldAlert , Trash } from 'lucide-react';
-import TaskModal from '../Modal/TaskModal';
-import ConfirmDialog from '../Modal/ConfirmDialog';
+import TaskModal from '../Modal/TaskModal.jsx';
+import ConfirmDialog from '../Modal/ConfirmDialog.jsx';
 function CalendarView() {
     const api = useApi()
     const [tasks , setTasks] = useState([]);

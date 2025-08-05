@@ -1,6 +1,6 @@
 import React from 'react'
-import Navbar from '../../components/navbar/Navbar'
-import CalendarView from '../../components/calendar/CalendarView'
+import Navbar from '../../components/navbar/Navbar.jsx'
+import CalendarView from '../../components/calendar/CalendarView.jsx'
 
 function Dashboard() {
   return (

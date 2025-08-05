@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useApi } from '../../axios/useApi';
+import { useApi } from '../../axios/useApi.js';
 import { toast } from 'sonner';
 import { CircleCheckBig } from 'lucide-react';
 

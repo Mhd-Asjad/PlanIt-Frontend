@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { LogOut, Plus, User } from 'lucide-react';
 import planit from '../../assets/planitIcon.png';
-import { useAuth } from '../../context/AuthProvider';
-import TaskModal from '../Modal/TaskModal';
-import ConfirmDialog from '../Modal/ConfirmDialog';
+import { useAuth } from '../../context/AuthProvider.jsx';
+import TaskModal from '../Modal/TaskModal.jsx';
+import ConfirmDialog from '../Modal/ConfirmDialog.jsx';
 
 const NavButton = ({ title, icon: Icon, onClick }) => (
   <button

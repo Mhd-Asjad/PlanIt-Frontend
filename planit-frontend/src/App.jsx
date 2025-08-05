@@ -1,10 +1,10 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Login from './pages/auth/login';
+import Login from './pages/auth/Login.jsx';
 import './index.css'
-import Register from './pages/auth/register';
-import Dashboard from './pages/dashboard/Dashboard';
-import PrivateRoute from './routes/PrivateRoute';
-import PublicRoute from './routes/PublicRoute';
+import Register from './pages/auth/Register.jsx';
+import Dashboard from './pages/dashboard/Dashboard.jsx';
+import PrivateRoute from './routes/PrivateRoute.jsx';
+import PublicRoute from './routes/PublicRoute.jsx';
 function App() {
 
   return (

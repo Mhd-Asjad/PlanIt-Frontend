@@ -2,7 +2,7 @@ import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { User } from 'lucide-react';
-import { useApi } from '../../axios/useApi';
+import { useApi } from '../../axios/useApi.js';
 import {Link, useNavigate} from 'react-router-dom';
 import { toast } from 'sonner';
 const Register = () => {

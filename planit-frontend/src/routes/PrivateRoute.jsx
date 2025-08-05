@@ -1,4 +1,4 @@
-import { useAuth } from "../context/AuthProvider";
+import { useAuth } from "../context/AuthProvider.jsx";
 import { Navigate } from "react-router-dom";
 function PrivateRoute({ children }) {
     const { isAuthenticated } = useAuth();
