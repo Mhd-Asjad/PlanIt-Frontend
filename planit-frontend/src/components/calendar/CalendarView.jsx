@@ -3,16 +3,18 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import { useApi } from '../../axios/useApi'
 import interactionPlugin from "@fullcalendar/interaction";
-import {toast} from 'sonner';
-import { ShieldAlert } from 'lucide-react';
+import {toast } from 'sonner';
+import { ShieldAlert , Trash } from 'lucide-react';
 import TaskModal from '../Modal/TaskModal';
-
+import ConfirmDialog from '../Modal/ConfirmDialog';
 function CalendarView() {
     const api = useApi()
     const [tasks , setTasks] = useState([]);
     const [selectedDate , setSelectedDate ] = useState(null);
     const [showModal , setShowModal] = useState(false);
     const [selectedTask , setSelectedTask ] = useState(null);
+    const [ showConfirm , setShowConfirm ] = useState(false);
+    const [taskIdToDelete , setTaskIdToDelete ] = useState(null);
     const [loading  , setLoading ] = useState(false);
     console.log(tasks, 'tasks in calendar view');
     useEffect(() => {
@@ -72,6 +74,27 @@ function CalendarView() {
         .filter((event) => event.date);
     };
 
+    const handleOpenDelete = (taskId) => {
+        setTaskIdToDelete(taskId);
+        setShowConfirm(true);
+    }
+    const handleDelete = async () => {
+        try {
+            setLoading(true);
+            await api.delete(`/task/delete/${taskIdToDelete}`);
+            toast.success('Task deleted successfully!', {
+                icon: <ShieldAlert className="w-4 h-4" />
+            });
+            fetchEvents();
+        } catch (error) {
+            console.error("Error deleting task:", error);
+            toast.error('Failed to delete task');
+        } finally {
+            setShowConfirm(false);
+            setLoading(false);
+        }
+    };
+
   return (
 
     <div>
@@ -96,16 +119,33 @@ function CalendarView() {
                 const task = tasks.find(
                     (t) => (t.id || t._id) == info.event.id
                 );
-                console.log(task, 'task in event click');
-                if (task){
+                if (task) {
                     setSelectedTask(task);
                     setShowModal(true);
-                }else{
-                    console.log("Task not found for event click", info.event.id);
                 }
             }}
+            eventContent={(arg) => (
+                <div style={{ position: 'relative' }}>
+                <span>{arg.event.title}</span>
+                <button
+                    style={{
+                    position: 'absolute',
+                    right: 0,
+                    top: 0,
+                    background: 'transparent',
+                    border: 'none',
+                    cursor: 'pointer'
+                    }}
+                    onClick={(e) => {
+                    e.stopPropagation();
+                    handleOpenDelete(arg.event.id);
+                    }}
+                >
+                    <Trash className="w-4 h-4" />
+                </button>
+                </div>
+            )}
             dayCellClassNames="hover:bg-gray-800 transition-colors cursor-pointer text-white"
-
         />
 
         <TaskModal
@@ -126,10 +166,18 @@ function CalendarView() {
                 selectedDate={selectedDate}
                 selectedTask={selectedTask}
                 fetchEvents={fetchEvents}
+                
             />
-
         )}
-        
+        <ConfirmDialog
+            open={showConfirm}
+            title="Delete Task"
+            description="Are you sure you want to delete this task? This action cannot be undone."
+            onClose={() => setShowConfirm(false)}
+            onConfirm={handleDelete}
+            confirmText="Delete"
+            cancelText="Cancel"
+        />
     </div>
   )
 }

@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useApi } from '../../axios/useApi';
+import { toast } from 'sonner';
+import { CircleCheckBig } from 'lucide-react';
 
 export default function TaskModal({ show, onClose, selectedDate=null , selectedTask = null , fetchEvents=null }) {
     const api = useApi();
@@ -19,7 +21,8 @@ export default function TaskModal({ show, onClose, selectedDate=null , selectedT
         validationSchema: Yup.object().shape({
             title: Yup.string().max(200).required('Title is required'),
             description: Yup.string(),
-            due_date: Yup.date().required('Due date is required'),
+            due_date: Yup.date().required('Due date is required')
+                .min(new Date(), 'Due date cannot be in the past'),
             status: Yup.string().oneOf(['pending', 'in-progress', 'completed']),
             priority: Yup.string().oneOf(['low', 'medium', 'high']),
         }),
@@ -28,18 +31,24 @@ export default function TaskModal({ show, onClose, selectedDate=null , selectedT
                 const payload = {
                     ...values,
                     user_id: String(currentUser?.id),
-                    due_date: new Date(values.due_date).toISOString(),
+                    due_date: new Date(values.due_date).toLocaleString("sv-SE").replace(" ", "T")
                 };
                 console.log(payload);
                 if (selectedTask) {
                     payload.id = String(selectedTask.id);
                     await api.patch (`/task/update/${selectedTask.id}`, payload);
                     fetchEvents();
-                    alert('Task updated successfully!');
+                    toast.success('Task updated successfully!', {
+                        icon: <CircleCheckBig className="w-4 h-4" />
+                    });
                 }else{
-                    await api.post('/task/create', payload);    
-                    fetchEvents();
-                    alert('Task created successfully!');
+                    await api.post('/task/create', payload);
+                    if (fetchEvents) {
+                        fetchEvents();
+                    }
+                    toast.success('Task created successfully!', {
+                        icon: <CircleCheckBig className="w-4 h-4" />
+                    });
                 }
                 resetForm();
                 onClose();

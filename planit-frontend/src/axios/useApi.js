@@ -18,6 +18,23 @@ export const useApi = () => {
                 return config
             }
         )
+
+        instance.interceptors.response.use(
+            (response) => response,
+            async (error) => {
+                if (error.response) {
+                    const status = error.response.status;
+                    console.log(status )
+                    if (status === 401 || status === 403 ){
+                        console.warn("unauthrized token or expired")
+
+                        localStorage.removeItem("access_token");
+                        window.location.href = "/login";
+                    }
+                }
+                return Promise.reject(error);
+            } 
+        )
         return instance
 
     },[token])
