@@ -35,6 +35,7 @@ const Login = () => {
           password: values.password
 
         })
+        console.log(payload)
         const res = await api.post('/user/login', payload, {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
@@ -125,6 +126,12 @@ const Login = () => {
           </button>
           <div className="text-center mt-4">
             <p className="text-gray-400 text-sm">
+              Want to use otp instead?{' '}
+              <Link to="/otp-login" className="text-blue-500 hover:underline">
+                login
+              </Link>
+            </p>
+            <p className="text-gray-400 text-sm mt-2">
               Don't have an account?{' '}
               <Link to="/register" className="text-blue-500 hover:underline">
                 Register
