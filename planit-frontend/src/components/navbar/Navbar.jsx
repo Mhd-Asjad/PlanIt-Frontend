@@ -33,16 +33,16 @@ function Navbar() {
   }
   return (
     <div className="flex justify-center w-full px-4 sm:px-6 md:px-8">
-      <nav className="flex justify-between items-center w-full max-w-6xl px-4 py-3 sm:px-6 sm:py-2 md:px-6 md:py-2 
+      <nav className="flex justify-between items-center w-full max-w-8xl px-4 py-3 sm:px-6 sm:py-2 md:px-6 md:py-2 
         rounded-full shadow-lg bg-gradient-to-r from-gray-800 via-gray-900 to-gray-800 text-white 
         border border-gray-700 my-4 transition-all duration-200">
         
-        <div className="flex justify-center h-16 w-16 sm:h-20 sm:w-20 md:h-20 md:w-20 rounded-full object-cover object-center"
+        <div className="flex justify-center px-2 h-16 w-16 sm:h-20 sm:w-20 md:h-20 md:w-20 rounded-full object-cover object-center"
           >
           <img
             src={planit}
             alt="PlanIt Logo"
-            className="h-16 w-16 object-cover"
+            className="ml-6 h-16 w-16 object-cover"
           />
           <div className='py-6' >
               <span className='text-xl font-bold font-serif' >PlanIt</span>

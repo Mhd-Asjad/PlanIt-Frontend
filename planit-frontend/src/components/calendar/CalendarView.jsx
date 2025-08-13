@@ -4,9 +4,11 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import { useApi } from '../../axios/useApi.js'
 import interactionPlugin from "@fullcalendar/interaction";
 import {toast } from 'sonner';
-import { ShieldAlert , Trash } from 'lucide-react';
+import { ShieldAlert , Trash, LayoutList } from 'lucide-react';
 import TaskModal from '../Modal/TaskModal.jsx';
 import ConfirmDialog from '../Modal/ConfirmDialog.jsx';
+import ScheduledTasks from '../tasks/ScheduledTasks.jsx';
+
 function CalendarView() {
     const api = useApi()
     const [tasks , setTasks] = useState([]);
@@ -78,6 +80,8 @@ function CalendarView() {
         setTaskIdToDelete(taskId);
         setShowConfirm(true);
     }
+
+    console.log(tasks)
     const handleDelete = async () => {
         try {
             setLoading(true);
@@ -97,56 +101,75 @@ function CalendarView() {
 
   return (
 
-    <div>
-        <FullCalendar
-            plugins={[ dayGridPlugin , interactionPlugin ]}
-            initialView='dayGridMonth'
-            events={getCalendarEvents()}
-            headerToolbar={{
+   <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-5">
 
-                left: "prev,next today",
-                center: "title",
-                right: "dayGridMonth"
-            }}
-            eventDisplay='block'
-            height="auto"
-            validRange={{
-                start: new Date().toISOString().split("T")[0],
-            }}
-            dateClick={handleDateClick}
-            eventClick={(info) => {
-                console.log(tasks , 'takks in event')
-                const task = tasks.find(
-                    (t) => (t.id || t._id) == info.event.id
-                );
-                if (task) {
-                    setSelectedTask(task);
-                    setShowModal(true);
-                }
-            }}
-            eventContent={(arg) => (
-                <div style={{ position: 'relative' }}>
-                <span>{arg.event.title}</span>
-                <button
-                    style={{
-                    position: 'absolute',
-                    right: 0,
-                    top: 0,
-                    background: 'transparent',
-                    border: 'none',
-                    cursor: 'pointer'
-                    }}
-                    onClick={(e) => {
-                    e.stopPropagation();
-                    handleOpenDelete(arg.event.id);
-                    }}
-                >
-                    <Trash className="w-4 h-4" />
-                </button>
-                </div>
-            )}
-            dayCellClassNames="hover:bg-gray-800 transition-colors cursor-pointer text-white"
-        />
+        <div className="bg-gray-900 rounded-2xl p-4 text-white">
+
+            <div className='flex justify-content-center' >
+                <h2 className='font-semibold text-xl text-gray-300 mx-auto' > Scheduled Tasks
+                <LayoutList size={27} className='inline ml-2'/>    
+                </h2>
+            </div>
+            <div className="h-[2px] w-full bg-gradient-to-r from-white to-gray-500 my-4"></div>
+
+            <div>
+            
+            </div>
+            <ScheduledTasks tasks={tasks} />
+        </div>
+        <div className='lg:col-span-2' >
+
+
+            <FullCalendar
+                plugins={[ dayGridPlugin , interactionPlugin ]}
+                initialView='dayGridMonth'
+                events={getCalendarEvents()}
+                headerToolbar={{
+
+                    left: "prev,next today",
+                    center: "title",
+                    right: "dayGridMonth"
+                }}
+                eventDisplay='block'
+                height="auto"
+                validRange={{
+                    start: new Date().toISOString().split("T")[0],
+                }}
+                dateClick={handleDateClick}
+                eventClick={(info) => {
+                    console.log(tasks , 'takks in event')
+                    const task = tasks.find(
+                        (t) => (t.id || t._id) == info.event.id
+                    );
+                    if (task) {
+                        setSelectedTask(task);
+                        setShowModal(true);
+                    }
+                }}
+                eventContent={(arg) => (
+                    <div style={{ position: 'relative' }}>
+                    <span>{arg.event.title}</span>
+                    <button
+                        style={{
+                        position: 'absolute',
+                        right: 0,
+                        top: 0,
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer'
+                        }}
+                        onClick={(e) => {
+                        e.stopPropagation();
+                        handleOpenDelete(arg.event.id);
+                        }}
+                    >
+                        <Trash className="w-4 h-4" />
+                    </button>
+                    </div>
+                )}
+                dayCellClassNames="hover:bg-gray-800 transition-colors cursor-pointer text-white"
+            />
+        </div>
 
         <TaskModal
             show={showModal}
