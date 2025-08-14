@@ -53,7 +53,7 @@ function CalendarView() {
     return tasks
         .map((task) => ({
         id: task.id || task._id,
-        title: task.title,
+        title: task.title.slice(0 , 14) + "..." ,
         date: formatDate(task.due_date),
         backgroundColor:
             task.priority === "high"

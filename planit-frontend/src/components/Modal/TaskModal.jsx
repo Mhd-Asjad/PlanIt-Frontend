@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useApi } from '../../axios/useApi.js';
 import { toast } from 'sonner';
-import { CircleCheckBig } from 'lucide-react';
+import { CircleCheckBig, ShieldAlert  } from 'lucide-react';
 
 export default function TaskModal({ show, onClose, selectedDate=null , selectedTask = null , fetchEvents=null }) {
     const api = useApi();
@@ -33,7 +33,20 @@ export default function TaskModal({ show, onClose, selectedDate=null , selectedT
                     user_id: String(currentUser?.id),
                     due_date: new Date(values.due_date).toLocaleString("sv-SE").replace(" ", "T")
                 };
-                console.log(payload);
+                if (values.title.trim().length < 5) {
+                        toast.error("title must be more than 4 characters", {
+                        icon: <ShieldAlert className="w-4 h-4" />,
+                    });
+                    return;
+            
+
+                }
+                if (values.title.trim() === "" ){
+                    toast.error("title is required", {
+                        icon: <ShieldAlert className="w-4 h-4" />,
+                    });
+                    return
+                } 
                 if (selectedTask) {
                     payload.id = String(selectedTask.id);
                     await api.patch (`/task/update/${selectedTask.id}`, payload);
@@ -53,8 +66,14 @@ export default function TaskModal({ show, onClose, selectedDate=null , selectedT
                 resetForm();
                 onClose();
             } catch (err) {
-                console.log(err , 'error while creating task')
-                alert('Failed to create task');
+                if (err.response){
+                    toast.error(err.response.data.detail, {
+                        icon: <ShieldAlert className="w-4 h-4" />,
+                    });
+
+                }else {
+                    console.error(err.message , 'error while adding task')
+                }
             }
         },
     });

@@ -61,16 +61,19 @@ import { CheckCircle, Clock } from "lucide-react";
             )}
           </div>
 
-          {/* Description if available */}
           {task.description && (
             <p className="text-sm text-gray-400">{task.description}</p>
           )}
 
           <div className="flex justify-between text-xs text-gray-500">
             <span>Due: {new Date(task.due_date).toLocaleDateString()}</span>
-            <span className="text-xs font-medium text-blue-400">
-                Time left: {timeLeft[task.id || task._id] || "Loading..."}
-            </span>
+
+            {task.status !== "completed" &&
+
+              <span className="text-xs font-medium text-blue-400">
+                  Time left: {timeLeft[task.id || task._id] || "Loading..."}
+              </span>
+            }
 
 
           </div>

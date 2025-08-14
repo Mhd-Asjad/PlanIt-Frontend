@@ -35,16 +35,17 @@ const Register = () => {
             email: values.email,
             password: values.password
         }
-        console.log(payload, 'payload in register')
         const res = await api.post('/user/register',payload)
-        if (res.status === 200){
+        console.log(res.data);
+        
+        if (res.data.status === 200){
           console.log(res.data, 'response in register')
           formik.resetForm();
           toast.success('Registration successful')
           navigate('/login')
         }
       }catch(error) {
-        toast.error(error.detail || 'Registration failed', {
+        toast.error(error.response.data.detail || 'Registration failed', {
           duration: 5000,
           description: 'Please try again later.',
         })

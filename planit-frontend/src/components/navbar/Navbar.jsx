@@ -21,6 +21,12 @@ function Navbar() {
   const { logout } = useAuth()
   const [showModal, setShowModal] = useState(false)
   const [ showConfirm, setShowConfirm ] = useState(false);
+  const userDetails = JSON.parse(localStorage.getItem('user')) || {};
+  const [showUserModal, setShowUserModal] = useState(false);
+  const openUserModal = () => setShowUserModal(true);
+  const closeUserModal = () => setShowUserModal(false);
+  console.log(userDetails)
+  
   const show = () => {
     setShowModal(true)
   }
@@ -31,6 +37,31 @@ function Navbar() {
   const handleOpenLogout = () => {
     setShowConfirm(true);
   }
+
+  const UserModal = ({ show, onClose, user }) => {
+  if (!show) return null;
+    return (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white text-gray-800 rounded-2xl p-6 w-80 shadow-lg">
+            <h2 className="text-xl font-bold mb-4">User Details</h2>
+            <div className="space-y-2">
+              <p><span className="font-semibold">Name:</span> {user.full_name}</p>
+              <p><span className="font-semibold">Email:</span> {user.email}</p>
+            </div>
+            <div className="mt-6 flex justify-end">
+              <button 
+                onClick={onClose}
+                className="px-4 py-2 rounded-lg bg-gray-800 text-white hover:bg-gray-700 transition"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+
   return (
     <div className="flex justify-center w-full px-4 sm:px-6 md:px-8">
       <nav className="flex justify-between items-center w-full max-w-8xl px-4 py-3 sm:px-6 sm:py-2 md:px-6 md:py-2 
@@ -53,6 +84,8 @@ function Navbar() {
         <div className="flex items-center space-x-3 sm:space-x-4 md:space-x-6">
           <NavButton title="Create Task" icon={Plus} onClick={show} />
           <NavButton title="logout" icon={LogOut} onClick={handleOpenLogout} />
+          <NavButton title="user" icon={User} onClick={openUserModal} />
+
         </div>
       </nav>
       <TaskModal show={showModal} onClose={closeModal} />
@@ -68,6 +101,13 @@ function Navbar() {
         confirmText="Logout"
         cancelText="Cancel" 
       />
+
+      <UserModal 
+        show={showUserModal} 
+        onClose={closeUserModal} 
+        user={userDetails} 
+      />
+
     </div>
   );
 }
